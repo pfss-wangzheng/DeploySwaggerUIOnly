@@ -19,7 +19,7 @@ permissions:
   id-token: write  
   
 concurrency:
-  group: "test"
+  group: "DeploySwaggerUIOnly"
   cancel-in-progress: true
 
 # A workflow run is made up of one or more jobs that can run sequentially or in parallel
