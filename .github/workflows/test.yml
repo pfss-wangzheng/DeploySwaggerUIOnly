@@ -65,6 +65,9 @@ jobs:
         with:
           name: swagger-ui
           path: swagger-temp/swagger-ui-test  
+      - name: display file
+        run: | 
+            ls swagger-temp/swagger-ui-test
       - name: Setup Pages                             #github-pagesを配置
         uses: actions/configure-pages@v4
       - name: Upload artifact                         #github-pages使用されたファイルをUPLOAD
