@@ -61,7 +61,7 @@ jobs:
           name: swagger-ui
           path: swagger-temp/swagger-ui-test  
       - name: Copy File
-          run:| 
+        run: | 
             ls swagger-temp/swagger-ui-test/dist/
             cp main/swaggerMV.json swagger-temp/swagger-ui-test/dist/
             cp main/swaggerTR.json swagger-temp/swagger-ui-test/dist/
