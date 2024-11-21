@@ -74,7 +74,8 @@ jobs:
           path: swagger-temp/swagger-ui-test  
       - name: display file
         run: | 
-            ls swagger-temp/swagger-ui-test
+            ls swagger-temp/
+            ls swagger-temp/swagger-ui-test/
             cat swagger-temp/swagger-ui-test/swagger-initializer.js
       - name: Setup Pages                             #github-pagesを配置
         uses: actions/configure-pages@v4
