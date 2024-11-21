@@ -43,7 +43,7 @@ jobs:
             ls swagger-ui/dist/
     - name: Modify Initializer.js       #swagger-initializer.jsを修正,ローカルswagger.jsonファイルを使用
       run:  
-        sed -i 's$"https:\/\/petstore\.swagger\.io\/v2\/swagger\.json"swaggerMV\.json"$g' swagger-ui/dist/swagger-initializer.js
+        sed -i 's$"https:\/\/petstore\.swagger\.io\/v2\/swagger\.json""swaggerMV\.json"$g' swagger-ui/dist/swagger-initializer.js
       #sed -i 's$"https:\/\/petstore\.swagger\.io\/v2\/swagger\.json"$new URL\(location\)\.searchParams\.get\("q"\) \|\| "./swaggerMV\.json"$g' swagger-ui/dist/swagger-initializer.js
       #|
           #sed -i 's|url: "https://petstore.swagger.io/v2/swagger.json",|urls: [\
