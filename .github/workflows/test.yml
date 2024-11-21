@@ -62,7 +62,7 @@ jobs:
           path: swagger-temp/swagger-ui-test  
       - name: Copy File
         run: | 
-            ls swagger-temp/swagger-ui-test/dist/
+            ls swagger-temp/swagger-ui-test/
             cp main/swaggerMV.json swagger-temp/swagger-ui-test/dist/
             cp main/swaggerTR.json swagger-temp/swagger-ui-test/dist/
       - name: Setup Pages                             #github-pagesを配置
