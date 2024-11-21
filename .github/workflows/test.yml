@@ -1,0 +1,76 @@
+# This is a basic workflow to help you get started with Actions
+
+name: DeploySwaggerUIOnly
+
+# Controls when the workflow will run
+on:
+  # Triggers the workflow on push or pull request events but only for the "main" branch
+  push:
+    branches: [ "main" ]
+  pull_request:
+    branches: [ "main" ]
+
+  # Allows you to run this workflow manually from the Actions tab
+  workflow_dispatch:
+
+permissions:
+  contents: read                 
+  pages: write                   
+  id-token: write   
+
+# A workflow run is made up of one or more jobs that can run sequentially or in parallel
+jobs:
+  # This workflow contains a single job called "build"
+  buildswagger:
+    # The type of runner that the job will run on
+    runs-on: ubuntu-latest
+
+    # Steps represent a sequence of tasks that will be executed as part of the job
+    steps:
+    - uses: actions/checkout@v4    #当前repositoryの内容を取得
+      with: 
+        path: main
+    - name: Checkout swagger-ui       #checkout swagger-ui
+      uses: actions/checkout@v4
+      with:
+        repository: swagger-api/swagger-ui
+        ref: 'v5.2.0'
+        path: swagger-ui
+    - name: Modify Initializer.js       #swagger-initializer.jsを修正,ローカルswagger.jsonファイルを使用
+      run:  sed -i 's$"https:\/\/petstore\.swagger\.io\/v2\/swagger\.json"$new URL\(location\)\.searchParams\.get\("q"\) \|\| "swaggerMV\.json"$g' swagger-ui/dist/swagger-initializer.js
+      #|
+          #sed -i 's|url: "https://petstore.swagger.io/v2/swagger.json",|urls: [\
+          # \n  { url: "./swaggerMV.json", name: "LDG MV" },\
+          #\n  { url: "./swaggerTR.json", name: "LDG TR" }\
+          # \n],|g' swagger-ui/dist/swagger-initializer.js
+    - name: Upload artifact for next job #upload-artifactでresourceをupload,次のjobを使用
+      uses: actions/upload-artifact@v4
+      with:
+        name: swagger-ui
+        path: swagger-ui/dist
+  deployswagger: 
+      needs: [buildswagger]    
+      runs-on: ubuntu-latest
+      environment:
+        name: github-pages-swagger-ui-test   #environment名前
+        url: ${{ steps.deployment.outputs.page_url }}swagger-ui-test  #アクセスのurl
+      steps: 
+      - name: Download artifact from buildswagger job #前JOBのswaggerファイルを取得
+        uses: actions/download-artifact@v4
+        with:
+          name: swagger-ui
+          path: swagger-temp/swagger-ui-test  
+      - name: Copy File
+          run:| 
+            ls swagger-temp/swagger-ui-test/dist/
+            cp main/swaggerMV.json swagger-temp/swagger-ui-test/dist/
+            cp main/swaggerTR.json swagger-temp/swagger-ui-test/dist/
+      - name: Setup Pages                             #github-pagesを配置
+        uses: actions/configure-pages@v4
+      - name: Upload artifact                         #github-pages使用されたファイルをUPLOAD
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: 'swagger-temp'
+      - name: Deploy to GitHub Pages                    #github-pagesにDEPLOY
+        id: deployment
+        uses: actions/deploy-pages@v4
