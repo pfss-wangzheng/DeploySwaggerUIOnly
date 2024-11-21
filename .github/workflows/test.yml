@@ -42,7 +42,7 @@ jobs:
             cp main/swaggerTR.json swagger-ui/dist/
             ls swagger-ui/dist/
     - name: Modify Initializer.js       #swagger-initializer.jsを修正,ローカルswagger.jsonファイルを使用
-      run:  sed -i 's$"https:\/\/petstore\.swagger\.io\/v2\/swagger\.json"$new URL\(location\)\.searchParams\.get\("q"\) \|\| "swaggerMV\.json"$g' swagger-ui/dist/swagger-initializer.js
+      run:  sed -i 's$"https:\/\/petstore\.swagger\.io\/v2\/swagger\.json"$new URL\(location\)\.searchParams\.get\("q"\) \|\| "./swaggerMV\.json"$g' swagger-ui/dist/swagger-initializer.js
       #|
           #sed -i 's|url: "https://petstore.swagger.io/v2/swagger.json",|urls: [\
           # \n  { url: "./swaggerMV.json", name: "LDG MV" },\
@@ -68,6 +68,7 @@ jobs:
       - name: display file
         run: | 
             ls swagger-temp/swagger-ui-test
+            cat swagger-temp/swagger-ui-test/swagger-initializer.js
       - name: Setup Pages                             #github-pagesを配置
         uses: actions/configure-pages@v4
       - name: Upload artifact                         #github-pages使用されたファイルをUPLOAD
