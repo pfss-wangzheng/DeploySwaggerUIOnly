@@ -1,0 +1,2 @@
+# DeploySwaggerUIOnly
+test
